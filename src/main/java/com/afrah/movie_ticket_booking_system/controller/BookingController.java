@@ -21,6 +21,8 @@ import com.afrah.movie_ticket_booking_system.strategy.Payment.PaymentStrategy;
 import com.afrah.movie_ticket_booking_system.strategy.Payment.PaymentStrategyFactory;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import jakarta.validation.Valid;
 
 @RestController
@@ -38,8 +40,36 @@ public class BookingController {
     }
 
     @Operation(summary = "Create a booking", description = "Creates a booking after validating the selected seats and processing the payment.")
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true, content = @Content(examples = {
+            @ExampleObject(name = "Credit Card", summary = "Book using Credit Card", value = """
+                    {
+                      "userId":"<userId>",
+                      "showId":"<showId>",
+                      "seatIds":["<seatId1>","<seatId2>"],
+                      "payment":{
+                        "paymentType":"CREDIT_CARD",
+                        "cardHolderName":"Afrah Shabbeer",
+                        "cardNumber":"4111111111111111",
+                        "expiryDate":"2029-12",
+                        "cvv":"123"
+                      }
+                    }
+                    """),
+            @ExampleObject(name = "UPI", summary = "Book using UPI", value = """
+                    {
+                      "userId":"<userId>",
+                      "showId":"<showId>",
+                      "seatIds":["<seatId1>","<seatId2>"],
+                      "payment":{
+                        "paymentType":"UPI",
+                        "upiId":"afrah@okaxis"
+                      }
+                    }
+                    """)
+    }))
     @PostMapping
-    public ResponseEntity<Booking> createBooking(@Valid @RequestBody CreateBookingRequest request) {
+    public ResponseEntity<Booking> createBooking(
+            @Valid @org.springframework.web.bind.annotation.RequestBody CreateBookingRequest request) {
 
         User user = userService.getUserById(request.getUserId());
         Show show = showService.getShowById(request.getShowId());
