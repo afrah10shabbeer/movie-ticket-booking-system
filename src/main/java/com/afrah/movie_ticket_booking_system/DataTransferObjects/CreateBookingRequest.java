@@ -22,7 +22,10 @@ public class CreateBookingRequest {
     private List<String> seatIds;
 
     @Valid
-    @Schema(description = "Payment details")
+    @Schema(description = "Payment details", oneOf = {
+            CreditCardPaymentRequest.class,
+            UpiPaymentRequest.class
+    })
     private CreatePaymentRequest payment;
 
     public CreateBookingRequest() {

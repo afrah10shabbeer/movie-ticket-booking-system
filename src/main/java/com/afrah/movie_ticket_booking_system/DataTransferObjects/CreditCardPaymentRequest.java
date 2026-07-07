@@ -9,9 +9,10 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
-public class CreditCardPaymentRequest implements PaymentRequest {
+public class CreditCardPaymentRequest implements CreatePaymentRequest {
 
-    @Schema(description = "Payment method", example = "CREDIT_CARD", allowableValues = { "CREDIT_CARD" })
+    @Schema(description = "Payment method", example = "CREDIT_CARD", allowableValues = {
+            "CREDIT_CARD" }, requiredMode = Schema.RequiredMode.REQUIRED)
     private final PaymentType paymentType = PaymentType.CREDIT_CARD;
 
     @NotBlank(message = "Card holder name is required")

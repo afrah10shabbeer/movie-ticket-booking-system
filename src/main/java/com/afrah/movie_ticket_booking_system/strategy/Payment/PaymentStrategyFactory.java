@@ -1,7 +1,7 @@
 package com.afrah.movie_ticket_booking_system.strategy.Payment;
 
 import com.afrah.movie_ticket_booking_system.DataTransferObjects.CreditCardPaymentRequest;
-import com.afrah.movie_ticket_booking_system.DataTransferObjects.PaymentRequest;
+import com.afrah.movie_ticket_booking_system.DataTransferObjects.CreatePaymentRequest;
 import com.afrah.movie_ticket_booking_system.DataTransferObjects.UpiPaymentRequest;
 import com.afrah.movie_ticket_booking_system.enums.PaymentType;
 import com.afrah.movie_ticket_booking_system.enums.PricingType;
@@ -11,7 +11,7 @@ import com.afrah.movie_ticket_booking_system.strategy.Pricing.PremiumPricingStra
 import com.afrah.movie_ticket_booking_system.strategy.Pricing.PricingStrategy;
 
 public class PaymentStrategyFactory {
-    public PaymentStrategy getPaymentStrategy(PaymentRequest request) {
+    public PaymentStrategy getPaymentStrategy(CreatePaymentRequest request) {
 
         switch (request.getPaymentType()) {
 

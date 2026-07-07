@@ -6,9 +6,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 
-public class UpiPaymentRequest implements PaymentRequest {
+public class UpiPaymentRequest implements CreatePaymentRequest {
 
-    @Schema(description = "Payment method", example = "UPI", allowableValues = { "UPI" })
+    @Schema(description = "Payment method", example = "UPI", allowableValues = {
+            "UPI" }, requiredMode = Schema.RequiredMode.REQUIRED)
     private final PaymentType paymentType = PaymentType.UPI;
 
     @NotBlank(message = "UPI ID is required")

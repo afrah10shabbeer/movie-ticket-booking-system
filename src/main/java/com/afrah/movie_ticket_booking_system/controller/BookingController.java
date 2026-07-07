@@ -17,7 +17,8 @@ import com.afrah.movie_ticket_booking_system.entity.User;
 import com.afrah.movie_ticket_booking_system.service.BookingService;
 import com.afrah.movie_ticket_booking_system.service.ShowService;
 import com.afrah.movie_ticket_booking_system.service.UserService;
-import com.afrah.movie_ticket_booking_system.strategy.Payment.CreditCardPaymentStrategy;
+import com.afrah.movie_ticket_booking_system.strategy.Payment.PaymentStrategy;
+import com.afrah.movie_ticket_booking_system.strategy.Payment.PaymentStrategyFactory;
 
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -30,9 +31,7 @@ public class BookingController {
     private final UserService userService;
     private final ShowService showService;
 
-    public BookingController(BookingService bookingService,
-            UserService userService,
-            ShowService showService) {
+    public BookingController(BookingService bookingService, UserService userService, ShowService showService) {
         this.bookingService = bookingService;
         this.userService = userService;
         this.showService = showService;
@@ -53,17 +52,15 @@ public class BookingController {
             }
         }
 
-        CreatePaymentRequest payment = request.getPayment();
+        CreatePaymentRequest paymentRequest = request.getPayment();
+
+        PaymentStrategy paymentStrategy = new PaymentStrategyFactory().getPaymentStrategy(paymentRequest);
 
         Booking booking = bookingService.createBooking(
                 user,
                 show,
                 seats,
-                new CreditCardPaymentStrategy(
-                        payment.getCardHolderName(),
-                        payment.getCardNumber(),
-                        YearMonth.parse(payment.getExpiryDate()),
-                        payment.getCvv()));
+                paymentStrategy);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(booking);
     }

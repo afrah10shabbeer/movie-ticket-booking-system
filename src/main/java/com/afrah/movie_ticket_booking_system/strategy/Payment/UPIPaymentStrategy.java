@@ -5,11 +5,11 @@ import java.util.UUID;
 import com.afrah.movie_ticket_booking_system.entity.PaymentTransaction;
 import com.afrah.movie_ticket_booking_system.enums.PaymentStatus;
 
-public class UPIPaymentStrategy implements PaymentStrategy {
+public class UpiPaymentStrategy implements PaymentStrategy {
 
     private String upiId;
 
-    public UPIPaymentStrategy(String upiId) {
+    public UpiPaymentStrategy(String upiId) {
         this.upiId = upiId;
     }
 
