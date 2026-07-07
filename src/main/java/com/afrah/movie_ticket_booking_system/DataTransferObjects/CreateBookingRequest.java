@@ -2,6 +2,7 @@ package com.afrah.movie_ticket_booking_system.DataTransferObjects;
 
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -9,15 +10,19 @@ import jakarta.validation.constraints.NotEmpty;
 public class CreateBookingRequest {
 
     @NotBlank(message = "User ID is required")
+    @Schema(example = "<userId>")
     private String userId;
 
     @NotBlank(message = "Show ID is required")
+    @Schema(example = "<showId>")
     private String showId;
 
     @NotEmpty(message = "At least one seat must be selected")
+    @Schema(example = "[\"<seatId1>\", \"<seatId2>\"]")
     private List<String> seatIds;
 
     @Valid
+    @Schema(description = "Payment details")
     private CreatePaymentRequest payment;
 
     public CreateBookingRequest() {
@@ -55,17 +60,3 @@ public class CreateBookingRequest {
         this.payment = payment;
     }
 }
-// {
-// "userId": "user-id",
-// "showId": "show-id",
-// "seatIds": [
-// "A1",
-// "A2"
-// ],
-// "payment": {
-// "cardHolderName": "Luke Skywalker",
-// "cardNumber": "1234567812345678",
-// "expiryDate": "2030-10",
-// "cvv": "123"
-// }
-// }

@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import com.afrah.movie_ticket_booking_system.DataTransferObjects.CreateShowRequest;
 import com.afrah.movie_ticket_booking_system.entity.Show;
 import com.afrah.movie_ticket_booking_system.service.ShowService;
-import com.afrah.movie_ticket_booking_system.strategy.Pricing.WeekdayPricingStrategy;
+import com.afrah.movie_ticket_booking_system.strategy.Pricing.PricingStrategy;
+import com.afrah.movie_ticket_booking_system.strategy.Pricing.PricingStrategyFactory;
 
 import io.swagger.v3.oas.annotations.Operation;
 
@@ -27,11 +28,13 @@ public class ShowController {
     @PostMapping
     public ResponseEntity<Show> addShow(@RequestBody CreateShowRequest request) {
 
+        PricingStrategy pricingStrategy = new PricingStrategyFactory().getPricingStrategy(request.getPricingType());
+
         Show show = showService.addShow(
                 request.getMovieId(),
                 request.getScreenId(),
                 request.getStartTime(),
-                new WeekdayPricingStrategy());
+                pricingStrategy);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(show);
     }

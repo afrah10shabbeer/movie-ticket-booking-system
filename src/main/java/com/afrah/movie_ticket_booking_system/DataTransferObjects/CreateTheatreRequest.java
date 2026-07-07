@@ -22,16 +22,16 @@ public class CreateTheatreRequest {
     @Schema(description = "List of screens in the theatre", example = """
             [
               {
-                "id": "SCREEN1",
+                "id": "<screenId>",
                 "seats": [
                   {
-                    "id": "<screenId>",
+                    "id": "<seatId>",
                     "row": 1,
                     "column": 1,
                     "seatType": "REGULAR"
                   },
                   {
-                    "id": "<screenId>",
+                    "id": "<seatId>",
                     "row": 1,
                     "column": 2,
                     "seatType": "PREMIUM"
