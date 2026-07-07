@@ -1,0 +1,34 @@
+package com.afrah.movie_ticket_booking_system.entity;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Screen {
+    private String id;
+    private List<Seat> seats;
+
+    public Screen() {
+
+    }
+
+    public Screen(String id) {
+        this.id = id;
+        this.seats = new ArrayList<>();
+    }
+
+    public void addSeat(Seat seat) {
+        seats.add(seat);
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public List<Seat> getSeats() {
+        return seats;
+    }
+
+    public void setSeats(List<Seat> seats) {
+        this.seats = seats;
+    }
+}
