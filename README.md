@@ -76,8 +76,8 @@ src
 1. Clone the repository
 
 ```bash
-git clone <repository-url>
-cd movie-ticket-booking-system
+git clone [<repository-url>
+cd movie-ticket-booking-system](https://github.com/afrah10shabbeer/movie-ticket-booking-system.git)
 ```
 
 2. Configure the database in `application.properties`.
@@ -233,7 +233,12 @@ Booking
 # 🌐 REST APIs
 <img width="1901" height="1012" alt="image" src="https://github.com/user-attachments/assets/bd3b849d-447d-4714-a91e-880a43eb33d0" />
 
-``` Swagger Page: http://localhost:8080/swagger-ui/index.html#/  ```
+
+``` 
+Swagger Page: http://localhost:8080/swagger-ui/index.html#/  
+```
+
+
 ## User APIs
 
 | Method | Endpoint |
