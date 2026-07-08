@@ -63,6 +63,37 @@ src
 └── util
 ```
 
+## 🚀 Running the Application
+
+### Prerequisites
+
+- Java 21
+- Maven (or use the Maven Wrapper included in the project)
+- MySQL
+
+### Steps
+
+1. Clone the repository
+
+```bash
+git clone <repository-url>
+cd movie-ticket-booking-system
+```
+
+2. Configure the database in `application.properties`.
+
+3. Run the application
+
+```bash
+.\mvnw.cmd spring-boot:run
+```
+
+The application will start at:
+
+```
+http://localhost:8080
+```
+
 ---
 
 # 🏛 Design Patterns Used
@@ -200,7 +231,9 @@ Booking
 ---
 
 # 🌐 REST APIs
+<img width="1901" height="1012" alt="image" src="https://github.com/user-attachments/assets/bd3b849d-447d-4714-a91e-880a43eb33d0" />
 
+``` Swagger Page: http://localhost:8080/swagger-ui/index.html#/  ```
 ## User APIs
 
 | Method | Endpoint |
