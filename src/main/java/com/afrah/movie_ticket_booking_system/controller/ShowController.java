@@ -9,10 +9,9 @@ import org.springframework.web.bind.annotation.*;
 import com.afrah.movie_ticket_booking_system.DataTransferObjects.CreateShowRequest;
 import com.afrah.movie_ticket_booking_system.entity.Show;
 import com.afrah.movie_ticket_booking_system.service.ShowService;
-import com.afrah.movie_ticket_booking_system.strategy.Pricing.PricingStrategy;
-import com.afrah.movie_ticket_booking_system.strategy.Pricing.PricingStrategyFactory;
 
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/shows")
@@ -26,41 +25,55 @@ public class ShowController {
 
     @Operation(summary = "Add a show", description = "Creates a new movie show.")
     @PostMapping
-    public ResponseEntity<Show> addShow(@RequestBody CreateShowRequest request) {
-
-        PricingStrategy pricingStrategy = new PricingStrategyFactory().getPricingStrategy(request.getPricingType());
+    public ResponseEntity<Show> addShow(
+            @Valid @RequestBody CreateShowRequest request) {
 
         Show show = showService.addShow(
                 request.getMovieId(),
                 request.getScreenId(),
                 request.getStartTime(),
-                pricingStrategy);
+                request.getPricingType());
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(show);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(show);
     }
 
-    @Operation(summary = "Get show by ID", description = "Retrieves a show using its unique ID.")
+    @Operation(summary = "Get show by ID")
     @GetMapping("/{showId}")
-    public ResponseEntity<Show> getShowById(@PathVariable String showId) {
-        return ResponseEntity.ok(showService.getShowById(showId));
+    public ResponseEntity<Show> getShowById(
+            @PathVariable String showId) {
+
+        return ResponseEntity.ok(
+                showService.getShowById(showId));
     }
 
-    @Operation(summary = "Get all shows", description = "Retrieves all available shows.")
+    @Operation(summary = "Get all shows")
     @GetMapping
     public ResponseEntity<List<Show>> getAllShows() {
-        return ResponseEntity.ok(showService.getAllShows());
+
+        return ResponseEntity.ok(
+                showService.getAllShows());
     }
 
-    @Operation(summary = "Delete a show", description = "Deletes a show using its unique ID.")
+    @Operation(summary = "Delete a show")
     @DeleteMapping("/{showId}")
-    public ResponseEntity<String> deleteShowById(@PathVariable String showId) {
+    public ResponseEntity<String> deleteShowById(
+            @PathVariable String showId) {
+
         showService.deleteShowById(showId);
-        return ResponseEntity.ok("Show deleted successfully.");
+
+        return ResponseEntity.ok(
+                "Show deleted successfully.");
     }
 
-    @Operation(summary = "Search shows", description = "Finds shows by movie title and city.")
+    @Operation(summary = "Search shows")
     @GetMapping("/search")
-    public ResponseEntity<List<Show>> findShows(@RequestParam String movieTitle, @RequestParam String cityName) {
-        return ResponseEntity.ok(showService.findShows(movieTitle, cityName));
+    public ResponseEntity<List<Show>> findShows(
+            @RequestParam String movieTitle,
+            @RequestParam String cityName) {
+
+        return ResponseEntity.ok(
+                showService.findShows(movieTitle, cityName));
     }
 }

@@ -56,7 +56,7 @@ public class SeatLockManager {
 
                 if (seat.getStatus() != SeatStatus.AVAILABLE) {
 
-                    throw new SeatNotAvailableException("Seat already unavailable: " + seat.getId());
+                    throw new SeatNotAvailableException("Seat already unavailable: " + seat.getSeatNumber());
                 }
             }
 
@@ -72,7 +72,7 @@ public class SeatLockManager {
             // 4. Store ownership
             for (Seat seat : seats) {
 
-                showLocks.put(seat.getId(), userId);
+                showLocks.put(seat.getSeatNumber(), userId);
             }
 
             // 5. Schedule auto unlock
@@ -87,7 +87,7 @@ public class SeatLockManager {
             logger.info(
                     "Seats {} locked for user {}",
                     seats.stream()
-                            .map(Seat::getId)
+                            .map(Seat::getSeatNumber)
                             .toList(),
                     userId);
         }
@@ -108,12 +108,12 @@ public class SeatLockManager {
 
             for (Seat seat : seats) {
 
-                String lockedUser = showLocks.get(seat.getId());
+                String lockedUser = showLocks.get(seat.getSeatNumber());
 
                 // Only unlock if same user owns the lock
                 if (userId.equals(lockedUser)) {
 
-                    showLocks.remove(seat.getId());
+                    showLocks.remove(seat.getSeatNumber());
 
                     // Timeout case
                     if (seat.getStatus() == SeatStatus.LOCKED) {
@@ -122,7 +122,7 @@ public class SeatLockManager {
 
                         logger.info(
                                 "Seat {} released due to timeout",
-                                seat.getId());
+                                seat.getSeatNumber());
                     }
                 }
             }

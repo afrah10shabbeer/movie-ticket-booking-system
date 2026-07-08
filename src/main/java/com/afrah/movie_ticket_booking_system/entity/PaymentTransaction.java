@@ -1,29 +1,49 @@
 package com.afrah.movie_ticket_booking_system.entity;
 
-import java.util.UUID;
+import org.hibernate.annotations.UuidGenerator;
 
 import com.afrah.movie_ticket_booking_system.enums.PaymentStatus;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "payment_transactions")
 public class PaymentTransaction {
-    private String id;
+
+    @Id
+    @UuidGenerator
+    private String paymentId;
+
     private String transactionId;
 
     private double amount;
+
+    @Enumerated(EnumType.STRING)
     private PaymentStatus paymentStatus;
 
     public PaymentTransaction() {
-
     }
 
     public PaymentTransaction(double amount, PaymentStatus paymentStatus, String transactionId) {
-        this.id = UUID.randomUUID().toString();
         this.amount = amount;
         this.paymentStatus = paymentStatus;
         this.transactionId = transactionId;
     }
 
-    public String getId() {
-        return id;
+    public String getPaymentId() {
+        return paymentId;
+    }
+
+    public String getTransactionId() {
+        return transactionId;
+    }
+
+    public void setTransactionId(String transactionId) {
+        this.transactionId = transactionId;
     }
 
     public double getAmount() {
@@ -40,9 +60,5 @@ public class PaymentTransaction {
 
     public void setPaymentStatus(PaymentStatus paymentStatus) {
         this.paymentStatus = paymentStatus;
-    }
-
-    public String getTransactionId() {
-        return transactionId;
     }
 }

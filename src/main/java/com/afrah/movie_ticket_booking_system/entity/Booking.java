@@ -2,23 +2,52 @@ package com.afrah.movie_ticket_booking_system.entity;
 
 import java.util.List;
 
+import org.hibernate.annotations.UuidGenerator;
+
 import com.afrah.movie_ticket_booking_system.enums.SeatStatus;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "bookings")
 public class Booking {
-    private String id;
+
+    @Id
+    @UuidGenerator
+    private String bookingId;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "show_id", nullable = false)
     private Show show;
+
+    @ManyToMany
+    @JoinTable(name = "booked_seats", joinColumns = @JoinColumn(name = "booking_id"), inverseJoinColumns = @JoinColumn(name = "seat_id"))
     private List<Seat> seats;
+
     private double totalAmount;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "payment_id")
     private PaymentTransaction payment;
 
     public Booking() {
-
     }
 
-    // Private constructor to be used by the Builder
-    public Booking(String id, User user, Show show, List<Seat> seats, double totalAmount, PaymentTransaction payment) {
-        this.id = id;
+    private Booking(User user, Show show, List<Seat> seats, double totalAmount, PaymentTransaction payment) {
+
         this.user = user;
         this.show = show;
         this.seats = seats;
@@ -26,8 +55,15 @@ public class Booking {
         this.payment = payment;
     }
 
-    public String getId() {
-        return id;
+    @PrePersist
+    public void confirmBooking() {
+        for (Seat seat : seats) {
+            seat.setStatus(SeatStatus.BOOKED);
+        }
+    }
+
+    public String getBookingId() {
+        return bookingId;
     }
 
     public User getUser() {
@@ -50,26 +86,17 @@ public class Booking {
         return payment;
     }
 
-    // Marks seats as BOOKED upon successful booking creation
-    public void confirmBooking() {
-        for (Seat seat : seats) {
-            seat.setStatus(SeatStatus.BOOKED);
-        }
-    }
+    // ===========================
+    // Builder
+    // ===========================
 
-    // Static inner Builder class
     public static class BookingBuilder {
-        private String id;
+
         private User user;
         private Show show;
         private List<Seat> seats;
         private double totalAmount;
         private PaymentTransaction payment;
-
-        public BookingBuilder setId(String id) {
-            this.id = id;
-            return this;
-        }
 
         public BookingBuilder setUser(User user) {
             this.user = user;
@@ -97,6 +124,7 @@ public class Booking {
         }
 
         public Booking build() {
+
             if (user == null) {
                 throw new IllegalStateException("User is required");
             }
@@ -113,17 +141,16 @@ public class Booking {
                 throw new IllegalStateException("Total amount must be greater than zero");
             }
 
-            return new Booking(id, user, show, seats, totalAmount, payment);
+            if (payment == null) {
+                throw new IllegalStateException("Payment is required");
+            }
+
+            return new Booking(
+                    user,
+                    show,
+                    seats,
+                    totalAmount,
+                    payment);
         }
-
-        // Booking booking = Booking.builder()
-        // .user(user)
-        // .show(show)
-        // .addSeat(seat1)
-        // .addSeat(seat2)
-        // .payment(payment)
-        // .totalAmount(800)
-        // .build();
-
     }
 }

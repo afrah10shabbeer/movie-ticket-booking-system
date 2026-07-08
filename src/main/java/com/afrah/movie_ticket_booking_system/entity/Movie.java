@@ -1,18 +1,35 @@
 package com.afrah.movie_ticket_booking_system.entity;
 
-import java.util.UUID;
+import org.hibernate.annotations.UuidGenerator;
 
 import com.afrah.movie_ticket_booking_system.pubsub.MoviePublisher;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+
+@Entity
+@Table(name = "movies")
 public class Movie {
 
-    private String id;
+    @Id
+    @UuidGenerator
+    private String movieId;
+
+    @Column(nullable = false)
     private String title;
+
+    @Column(nullable = false)
     private String genre;
+    @Column(nullable = false)
     private String language;
+    @Column(nullable = false)
     private int durationInMinutes;
 
+    @Transient
     private MoviePublisher publisher = new MoviePublisher();
 
     public Movie() {
@@ -20,7 +37,6 @@ public class Movie {
     }
 
     public Movie(String title, int durationInMinutes, String genre, String language) {
-        this.id = UUID.randomUUID().toString();
         this.title = title;
         this.durationInMinutes = durationInMinutes;
         this.genre = genre;
@@ -36,8 +52,8 @@ public class Movie {
         this.publisher = publisher;
     }
 
-    public String getId() {
-        return id;
+    public String getMovieId() {
+        return movieId;
     }
 
     public String getTitle() {

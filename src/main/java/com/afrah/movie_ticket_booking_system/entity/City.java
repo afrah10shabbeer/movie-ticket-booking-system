@@ -1,11 +1,24 @@
 package com.afrah.movie_ticket_booking_system.entity;
 
-import java.util.UUID;
+import org.hibernate.annotations.UuidGenerator;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "cities")
 public class City {
-    private String id;
 
+    @Id
+    @UuidGenerator
+    private String cityId;
+
+    @Column(nullable = false)
     private String state;
+
+    @Column(nullable = false)
     private String name;
 
     public City() {
@@ -13,13 +26,12 @@ public class City {
     }
 
     public City(String name, String state) {
-        this.id = UUID.randomUUID().toString();
         this.name = name;
         this.state = state;
     }
 
     public String getId() {
-        return id;
+        return cityId;
     }
 
     public String getName() {

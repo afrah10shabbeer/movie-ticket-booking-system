@@ -3,7 +3,6 @@ package com.afrah.movie_ticket_booking_system.DataTransferObjects;
 import java.time.LocalDateTime;
 
 import com.afrah.movie_ticket_booking_system.enums.PricingType;
-import com.afrah.movie_ticket_booking_system.strategy.Pricing.PricingStrategy;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;

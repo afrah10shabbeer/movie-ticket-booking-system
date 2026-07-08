@@ -1,49 +1,89 @@
 package com.afrah.movie_ticket_booking_system.entity;
 
+import org.hibernate.annotations.UuidGenerator;
+
 import com.afrah.movie_ticket_booking_system.enums.SeatStatus;
 import com.afrah.movie_ticket_booking_system.enums.SeatType;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "seats")
 public class Seat {
 
-    private String id;
-    private int row;
-    private int column;
+    @Id
+    @UuidGenerator
+    @Column(nullable = false, updatable = false)
+    private String seatId;
+
+    @Column(nullable = false)
+    private String seatNumber;
+
+    @Column(nullable = false)
+    private int seatRow;
+
+    @Column(nullable = false)
+    private int seatColumn;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private SeatType seatType;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private SeatStatus status;
 
+    @ManyToOne
+    @JoinColumn(name = "screen_id", nullable = false)
+    @JsonBackReference
+    private Screen screen;
+
     public Seat() {
+        this.status = SeatStatus.AVAILABLE;
     }
 
-    public Seat(String id, int row, int col, SeatType seatType) {
-        this.id = id;
-        this.row = row;
-        this.column = col;
+    public Seat(String seatNumber, int seatRow, int seatColumn, SeatType seatType) {
+        this.seatNumber = seatNumber;
+        this.seatRow = seatRow;
+        this.seatColumn = seatColumn;
         this.seatType = seatType;
         this.status = SeatStatus.AVAILABLE;
     }
 
-    public String getId() {
-        return id;
+    public String getSeatId() {
+        return seatId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public String getSeatNumber() {
+        return seatNumber;
     }
 
-    public int getRow() {
-        return row;
+    public void setSeatNumber(String seatNumber) {
+        this.seatNumber = seatNumber;
     }
 
-    public void setRow(int row) {
-        this.row = row;
+    public int getSeatRow() {
+        return seatRow;
     }
 
-    public int getColumn() {
-        return column;
+    public void setSeatRow(int seatRow) {
+        this.seatRow = seatRow;
     }
 
-    public void setColumn(int column) {
-        this.column = column;
+    public int getSeatColumn() {
+        return seatColumn;
+    }
+
+    public void setSeatColumn(int seatColumn) {
+        this.seatColumn = seatColumn;
     }
 
     public SeatType getSeatType() {
@@ -60,5 +100,13 @@ public class Seat {
 
     public void setStatus(SeatStatus status) {
         this.status = status;
+    }
+
+    public Screen getScreen() {
+        return screen;
+    }
+
+    public void setScreen(Screen screen) {
+        this.screen = screen;
     }
 }

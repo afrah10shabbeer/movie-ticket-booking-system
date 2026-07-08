@@ -1,95 +1,111 @@
 package com.afrah.movie_ticket_booking_system.service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.afrah.movie_ticket_booking_system.entity.*;
+import com.afrah.movie_ticket_booking_system.entity.Movie;
+import com.afrah.movie_ticket_booking_system.entity.Screen;
+import com.afrah.movie_ticket_booking_system.entity.Show;
+import com.afrah.movie_ticket_booking_system.entity.Theatre;
 import com.afrah.movie_ticket_booking_system.exception.ResourceNotFoundException;
-import com.afrah.movie_ticket_booking_system.strategy.Pricing.PricingStrategy;
+import com.afrah.movie_ticket_booking_system.repository.ShowRepository;
+import com.afrah.movie_ticket_booking_system.enums.PricingType;
 
 @Service
 public class ShowService {
 
-    private final Map<String, Show> shows = new ConcurrentHashMap<>();
+    private final ShowRepository showRepository;
 
     private final MovieService movieService;
     private final TheatreService theatreService;
 
-    public ShowService(MovieService movieService, TheatreService theatreService) {
+    private static final Logger logger = LoggerFactory.getLogger(ShowService.class);
+
+    public ShowService(
+            ShowRepository showRepository,
+            MovieService movieService,
+            TheatreService theatreService) {
+
+        this.showRepository = showRepository;
         this.movieService = movieService;
         this.theatreService = theatreService;
     }
 
-    public Show addShow(String movieId,
+    public Show addShow(
+            String movieId,
             String screenId,
             LocalDateTime startTime,
-            PricingStrategy pricingStrategy) {
+            PricingType pricingType) {
+
+        logger.info(
+                "Creating show for movie '{}' on screen '{}'",
+                movieId,
+                screenId);
 
         Movie movie = movieService.getMovieById(movieId);
+
         Screen screen = theatreService.getScreenById(screenId);
-
-        if (movie == null) {
-            throw new ResourceNotFoundException("Movie not found with id: " + movieId);
-        }
-
-        if (screen == null) {
-            throw new ResourceNotFoundException("Screen not found with id: " + screenId);
-        }
 
         Show show = new Show(
                 movie,
                 screen,
                 startTime,
-                pricingStrategy);
+                pricingType);
 
-        shows.put(show.getId(), show);
+        Show savedShow = showRepository.save(show);
 
-        return show;
+        logger.info(
+                "Show '{}' created successfully",
+                savedShow.getShowId());
+
+        return savedShow;
     }
 
     public Show getShowById(String showId) {
-        if (shows.containsKey(showId)) {
-            return shows.get(showId);
-        }
-        throw new ResourceNotFoundException("Show not found with id: " + showId);
+
+        return showRepository.findById(showId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Show not found with id: " + showId));
     }
 
     public List<Show> getAllShows() {
-        return new ArrayList<>(shows.values());
+
+        return showRepository.findAll();
+
     }
 
     public void deleteShowById(String showId) {
-        Show show = shows.remove(showId);
 
-        if (show == null) {
-            throw new ResourceNotFoundException("Show not found with id: " + showId);
-        }
+        Show show = getShowById(showId);
+
+        showRepository.delete(show);
+
+        logger.info(
+                "Show '{}' deleted successfully",
+                showId);
     }
 
-    public List<Show> findShows(String movieTitle, String cityName) {
-        List<Show> result = new ArrayList<>();
+    public List<Show> findShows(
+            String movieTitle,
+            String cityName) {
 
-        for (Show show : shows.values()) {
+        List<Show> allShows = showRepository.findByMovie_TitleIgnoreCase(movieTitle);
 
-            // Is it the movie the user searched?
-            if (!show.getMovie().getTitle().equalsIgnoreCase(movieTitle)) {
-                continue;
-            }
+        return allShows.stream()
+                .filter(show -> {
 
-            // Which theatre is this show running in?
-            Theatre theatre = theatreService.findTheatreForShow(show);
+                    Theatre theatre = theatreService.findTheatreForShow(show);
 
-            // Is that theatre in the requested city?
-            if (theatre != null &&
-                    theatre.getCity().getName().equalsIgnoreCase(cityName)) {
-                result.add(show);
-            }
-        }
+                    return theatre != null &&
+                            theatre.getCity()
+                                    .getName()
+                                    .equalsIgnoreCase(cityName);
 
-        return result;
+                })
+                .toList();
     }
 }

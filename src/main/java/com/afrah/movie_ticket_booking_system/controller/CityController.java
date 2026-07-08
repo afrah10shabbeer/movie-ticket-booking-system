@@ -1,6 +1,6 @@
 package com.afrah.movie_ticket_booking_system.controller;
 
-import java.util.Map;
+import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +38,7 @@ public class CityController {
 
     @Operation(summary = "Get all cities", description = "Retrieves all available cities.")
     @GetMapping
-    public ResponseEntity<Map<String, City>> getAllCities() {
+    public ResponseEntity<List<City>> getAllCities() {
         return ResponseEntity.ok(service.getAllCities());
     }
 

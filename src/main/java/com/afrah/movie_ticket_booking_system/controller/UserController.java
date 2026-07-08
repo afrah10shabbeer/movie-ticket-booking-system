@@ -1,6 +1,6 @@
 package com.afrah.movie_ticket_booking_system.controller;
 
-import java.util.Map;
+import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,7 +42,7 @@ public class UserController {
 
     @Operation(summary = "Get all users", description = "Retrieves all registered users.")
     @GetMapping
-    public ResponseEntity<Map<String, User>> getAllUsers() {
+    public ResponseEntity<List<User>> getAllUsers() {
         return ResponseEntity.ok(service.getAllUsers());
     }
 
