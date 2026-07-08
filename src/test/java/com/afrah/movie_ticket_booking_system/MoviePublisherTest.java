@@ -10,7 +10,7 @@ import com.afrah.movie_ticket_booking_system.entity.Movie;
 import com.afrah.movie_ticket_booking_system.pubsub.MoviePublisher;
 import com.afrah.movie_ticket_booking_system.pubsub.MovieSubscriber;
 
-class MoviePublisherTest {
+public class MoviePublisherTest {
 
     @Test
     void shouldNotifySubscriber() {
