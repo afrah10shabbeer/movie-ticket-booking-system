@@ -35,7 +35,7 @@ The application simulates an online movie ticket booking platform where users ca
 | Spring Boot | 3.x |
 | Spring Data JPA | ✓ |
 | Hibernate | ✓ |
-| MySQL | ✓ |
+| PostgresSQL | ✓ |
 | Maven | ✓ |
 | JUnit 5 | ✓ |
 | Mockito | ✓ |
