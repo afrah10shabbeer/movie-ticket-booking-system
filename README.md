@@ -76,8 +76,7 @@ src
 1. Clone the repository
 
 ```bash
-git clone [<repository-url>
-cd movie-ticket-booking-system](https://github.com/afrah10shabbeer/movie-ticket-booking-system.git)
+git clone https://github.com/afrah10shabbeer/movie-ticket-booking-system.git
 ```
 
 2. Configure the database in `application.properties`.
