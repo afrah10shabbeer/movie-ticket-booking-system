@@ -73,26 +73,17 @@ Used to dynamically choose pricing and payment algorithms.
 
 ### Pricing Strategies
 
-- Weekday Pricing
-- Weekend Pricing
-- Festival Pricing
+- Normal Pricing
+- Dynamic Pricing
+- Premium Pricing
 
 ### Payment Strategies
 
 - Credit Card
-- Debit Card
 - UPI
 
 Example:
 
-```java
-PricingStrategy pricingStrategy =
-        pricingStrategyFactory.getPricingStrategy(show.getPricingType());
-
-double totalAmount = pricingStrategy.calculatePrice(seats);
-```
-
----
 
 ## 2. Factory Pattern
 
@@ -270,9 +261,9 @@ PricingType
  ▼
 PricingStrategyFactory
  │
- ├── WeekdayPricingStrategy
- ├── WeekendPricingStrategy
- └── FestivalPricingStrategy
+ ├── NormalPricingStrategy
+ ├── DynamicPricingStrategy
+ └── PremiumPricingStrategy
 ```
 
 ---
@@ -325,9 +316,6 @@ The project uses **JUnit 5** and **Mockito** for unit testing.
 
 Current test coverage includes:
 
-- Booking Service
-- Pricing Strategy
-- Payment Strategy
 - Observer Pattern (Publisher & Subscriber)
 
 ---
@@ -337,8 +325,8 @@ Current test coverage includes:
 Custom exceptions implemented:
 
 - ResourceNotFoundException
-- SeatLockedException
-- SeatAlreadyBookedException
+- GlobalExceptionHandlerException
+- SeatNotAvailableException
 - PaymentFailedException
 
 A global exception handler returns consistent API responses.
@@ -357,20 +345,6 @@ SLF4J logging has been added for:
 
 ---
 
-# 🚀 Future Enhancements
-
-- JWT Authentication
-- Role-based Authorization
-- Email Notifications
-- SMS Notifications
-- Redis-based Seat Locking
-- Payment Gateway Integration (Stripe/Razorpay)
-- Docker Support
-- CI/CD Pipeline
-- Swagger/OpenAPI Documentation
-- Kafka-based Notifications
-
----
 
 # 👩‍💻 Author
 
